@@ -1,5 +1,5 @@
 # Blockchian to managing the chain, storing transactions, adding new blocks
-'''
+"""
 block = {
     'index': ...
     'timestamp': ...
@@ -13,12 +13,15 @@ block = {
         }
     ],
 }
-'''
+"""
 
 
 from time import time
 import json
 import  hashlib
+from textwrap import dedent
+from uuid import uuid4
+from flask import Flask
 
 
 class Blockchain(object):
@@ -53,7 +56,22 @@ class Blockchain(object):
         # return index of the block which the transaction will be added to
         return self.last_block['index']+1
 
+    def proof_of_work(self, last_proof):
+        proof = 0
+        while self.valid_proof(last_proof, proof) is False:
+            proof += 1
+        return proof
+
     # decorator
+    @staticmethod
+    def valid_proof(last_proof, proof):
+        """
+        proof hash(last_proof, proof) go with 4 leading zeros
+        """
+        guess = f'{last_proof}{proof}'.encode()
+        guess_hash = hashlib.sha256(guess).hexdigest()
+        return guess_hash[:4] == "0000"
+
     @staticmethod
     def hash(block):
         # Hashes a Block with SHA-256 hash
