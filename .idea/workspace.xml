@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9794d503-a7f6-4111-a94b-959638ba463c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/blockchain_node_2.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/blockchain.py" afterPath="$PROJECT_DIR$/blockchain.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -13,31 +13,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="blockchain.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/blockchain.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
-              <caret line="34" column="0" lean-forward="true" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-              <folding>
-                <element signature="e#411#452#0" expanded="true" />
-                <element signature="e#638#4268#0" expanded="false" />
-                <element signature="e#879#1322#0" expanded="false" />
-                <element signature="e#1390#1709#0" expanded="false" />
-                <element signature="e#1760#1873#0" expanded="false" />
-                <element signature="e#3607#3888#0" expanded="false" />
-                <element signature="e#3937#4093#0" expanded="false" />
-                <element signature="e#4525#5255#0" expanded="false" />
-                <element signature="e#5378#5853#0" expanded="false" />
-                <element signature="e#5962#6113#0" expanded="false" />
-                <element signature="e#6235#6585#0" expanded="false" />
-                <element signature="e#6693#7041#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -49,6 +25,8 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>last_block</find>
+      <find>last_proof</find>
+      <find>valid_chain</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -68,10 +46,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="367" />
-    <option name="y" value="268" />
-    <option name="width" value="1228" />
-    <option name="height" value="778" />
+    <option name="x" value="992" />
+    <option name="y" value="22" />
+    <option name="width" value="928" />
+    <option name="height" value="1058" />
   </component>
   <component name="ProjectView">
     <navigator currentView="Scope" currentSubView="Project Files" proportions="" version="1">
@@ -134,8 +112,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="367" y="268" width="1228" height="778" extended-state="0" />
-    <editor active="true" />
+    <frame x="992" y="22" width="928" height="1058" extended-state="0" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947369" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -166,7 +143,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="8" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -176,18 +153,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#411#452#0" expanded="true" />
-            <element signature="e#638#4268#0" expanded="false" />
-            <element signature="e#879#1322#0" expanded="false" />
-            <element signature="e#1390#1709#0" expanded="false" />
-            <element signature="e#1760#1873#0" expanded="false" />
-            <element signature="e#3607#3888#0" expanded="false" />
-            <element signature="e#3937#4093#0" expanded="false" />
-            <element signature="e#4525#5255#0" expanded="false" />
-            <element signature="e#5378#5853#0" expanded="false" />
-            <element signature="e#5962#6113#0" expanded="false" />
-            <element signature="e#6235#6585#0" expanded="false" />
-            <element signature="e#6693#7041#0" expanded="false" />
+            <element signature="e#409#450#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -197,18 +163,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#411#452#0" expanded="true" />
-            <element signature="e#638#4268#0" expanded="false" />
-            <element signature="e#879#1322#0" expanded="false" />
-            <element signature="e#1390#1709#0" expanded="false" />
-            <element signature="e#1760#1873#0" expanded="false" />
-            <element signature="e#3607#3888#0" expanded="false" />
-            <element signature="e#3937#4093#0" expanded="false" />
-            <element signature="e#4525#5255#0" expanded="false" />
-            <element signature="e#5378#5853#0" expanded="false" />
-            <element signature="e#5962#6113#0" expanded="false" />
-            <element signature="e#6235#6585#0" expanded="false" />
-            <element signature="e#6693#7041#0" expanded="false" />
+            <element signature="e#409#450#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -218,18 +173,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#411#452#0" expanded="true" />
-            <element signature="e#638#4268#0" expanded="false" />
-            <element signature="e#879#1322#0" expanded="false" />
-            <element signature="e#1390#1709#0" expanded="false" />
-            <element signature="e#1760#1873#0" expanded="false" />
-            <element signature="e#3607#3888#0" expanded="false" />
-            <element signature="e#3937#4093#0" expanded="false" />
-            <element signature="e#4525#5255#0" expanded="false" />
-            <element signature="e#5378#5853#0" expanded="false" />
-            <element signature="e#5962#6113#0" expanded="false" />
-            <element signature="e#6235#6585#0" expanded="false" />
-            <element signature="e#6693#7041#0" expanded="false" />
+            <element signature="e#409#450#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -239,39 +183,27 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#411#452#0" expanded="true" />
-            <element signature="e#638#4268#0" expanded="false" />
-            <element signature="e#879#1322#0" expanded="false" />
-            <element signature="e#1390#1709#0" expanded="false" />
-            <element signature="e#1760#1873#0" expanded="false" />
-            <element signature="e#3607#3888#0" expanded="false" />
-            <element signature="e#3937#4093#0" expanded="false" />
-            <element signature="e#4525#5255#0" expanded="false" />
-            <element signature="e#5378#5853#0" expanded="false" />
-            <element signature="e#5962#6113#0" expanded="false" />
-            <element signature="e#6235#6585#0" expanded="false" />
-            <element signature="e#6693#7041#0" expanded="false" />
+            <element signature="e#409#450#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/blockchain.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="34" column="0" lean-forward="true" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#411#452#0" expanded="true" />
-            <element signature="e#638#4268#0" expanded="false" />
-            <element signature="e#879#1322#0" expanded="false" />
-            <element signature="e#1390#1709#0" expanded="false" />
-            <element signature="e#1760#1873#0" expanded="false" />
-            <element signature="e#3607#3888#0" expanded="false" />
-            <element signature="e#3937#4093#0" expanded="false" />
-            <element signature="e#4525#5255#0" expanded="false" />
-            <element signature="e#5378#5853#0" expanded="false" />
-            <element signature="e#5962#6113#0" expanded="false" />
-            <element signature="e#6235#6585#0" expanded="false" />
-            <element signature="e#6693#7041#0" expanded="false" />
+            <element signature="e#409#450#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/blockchain.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4410">
+          <caret line="245" column="37" lean-forward="true" selection-start-line="245" selection-start-column="37" selection-end-line="245" selection-end-column="37" />
+          <folding>
+            <element signature="e#409#450#0" expanded="true" />
           </folding>
         </state>
       </provider>

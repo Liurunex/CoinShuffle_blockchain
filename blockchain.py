@@ -20,11 +20,8 @@ transaction request = {
     'amount': ...
 }
 """
-
-
 from flask import Flask, jsonify, request
 from urllib.parse import urlparse
-# from textwrap import dedent
 from uuid import uuid4
 from time import time
 
@@ -33,16 +30,17 @@ import hashlib
 import json
 
 
-class Blockchain(object):
+class Blockchain:
     def __init__(self):
-        self.nodes = set()
-        self.chain = []
         self.current_transactions = []
-        # genesis block
-        self.new_block(previous_hash=1, proof=100)
+        self.chain = []
+        self.nodes = set()
 
-    def new_block(self, previous_hash, proof):
-        # Creates a new Block and adds it to the chain
+        # genesis block
+        self.new_block(previous_hash='1', proof=100)
+
+    def new_block(self, proof, previous_hash):
+        # creates a new Block and adds it to the chain
         block = {
             'index': len(self.chain) + 1,
             'timestamp': time(),
@@ -50,6 +48,7 @@ class Blockchain(object):
             'proof': proof,
             'previous_hash': previous_hash or self.hash(self.chain[-1]),
         }
+
         # reset current list of transaction
         self.current_transactions = []
 
@@ -57,27 +56,34 @@ class Blockchain(object):
         return block
 
     def new_transaction(self, sender, recipient, amount):
-        # Adds a new transaction to the list of transactions
+        # adds a new transaction to the list of transactions
         self.current_transactions.append({
             'sender': sender,
             'recipient': recipient,
             'amount': amount,
         })
         # return index of the block which the transaction will be added to
-        return self.last_block['index']+1
+        return self.last_block['index'] + 1
 
-    def proof_of_work(self, last_proof):
+    def proof_of_work(self, last_block):
+        last_proof = last_block['proof']
+        last_hash = self.hash(last_block)
+
         proof = 0
-        while self.valid_proof(last_proof, proof) is False:
+        while self.valid_proof(last_proof, proof, last_hash) is False:
             proof += 1
         return proof
 
     def register_node(self, address):
         # add new node to node list
         parsed_url = urlparse(address)
-        self.nodes.add(parsed_url.netloc)
+        if parsed_url.netloc:
+            self.nodes.add(parsed_url.netloc)
+        elif parsed_url.path:
+            self.nodes.add(parsed_url.path)
+        else:
+            raise ValueError('Invalid URL')
 
-    # longest chain is authoritative
     def valid_chain(self, chain):
         last_block = chain[0]
         current_index = 1
@@ -89,10 +95,11 @@ class Blockchain(object):
             print("\n-----------\n")
 
             # check hash
-            if block['previous_hash'] != self.hash(last_block):
+            last_block_hash = self.hash(last_block)
+            if block['previous_hash'] != last_block_hash:
                 return False
             # check PoW
-            if not self.valid_proof(last_block['proof'], block['proof']):
+            if not self.valid_proof(last_block['proof'], block['proof'], last_block_hash):
                 return False
             # iteration
             last_block = block
@@ -100,13 +107,14 @@ class Blockchain(object):
 
         return True
 
-    # consensus algorithm: replacing chain with longest one in network
     def resolve_conflicts(self):
+        # consensus algorithm: replacing chain with longest one in network
         neighbours = self.nodes
         new_chain = None
 
         max_length = len(self.chain)
-        # verify hte chains from all nodes in network
+
+        # verify the chains from all nodes in network
         for node in neighbours:
             response = requests.get(f'http://{node}/chain')
             if response.status_code == 200:
@@ -121,19 +129,18 @@ class Blockchain(object):
         # replace chain if found
         if new_chain:
             self.chain = new_chain
+            print("class_resolve_conflicts return True")
             return True
-        return False
+        else:
+            print("class_resolve_conflicts return False")
+            return False
 
     # decorator
-    @staticmethod
-    def valid_proof(last_proof, proof):
-        """
-        proof hash(last_proof, proof) go with 4 leading zeros
-        """
-        # guess = f'{last_proof}{proof}{last_hash}'.encode()
-        guess = f'{last_proof}{proof}'.encode()
-        guess_hash = hashlib.sha256(guess).hexdigest()
-        return guess_hash[:4] == "0000"
+    # property decorator: set the func as class member
+    @property
+    def last_block(self):
+        # Returns the last Block in the chain
+        return self.chain[-1]
 
     @staticmethod
     def hash(block):
@@ -141,14 +148,15 @@ class Blockchain(object):
         block_string = json.dumps(block, sort_keys=True).encode()
         return hashlib.sha256(block_string).hexdigest()
 
-    # property decorator: set the func as class member
-    @property
-    def last_block(self):
-        # Returns the last Block in the chain
-        return self.chain[-1]
+    @staticmethod
+    def valid_proof(last_proof, proof, last_hash):
+        # proof hash(last_proof, proof) go with 4 leading zeros
+        guess = f'{last_proof}{proof}{last_hash}'.encode()
+        guess_hash = hashlib.sha256(guess).hexdigest()
+        return guess_hash[:4] == "0000"
 
 
-# instantiate Node
+# instantiate the Node
 app = Flask(__name__)
 
 # globally unique address
@@ -161,10 +169,9 @@ blockchain = Blockchain()
 # /mine endpoint, GET request
 @app.route('/mine', methods=['GET'])
 def mine():
-    # POW
+    # PoW
     last_block = blockchain.last_block
-    last_proof = last_block['proof']
-    proof = blockchain.proof_of_work(last_proof)
+    proof = blockchain.proof_of_work(last_block)
 
     # sender is 0 to signify this node has mined a new coin
     blockchain.new_transaction(
@@ -178,7 +185,7 @@ def mine():
     block = blockchain.new_block(proof, previous_hash)
 
     response = {
-        'message': "New Block Created",
+        'message': "New Block Forged",
         'index': block['index'],
         'transactions': block['transactions'],
         'proof': block['proof'],
@@ -198,7 +205,7 @@ def new_transaction():
     if not all(k in values for k in required):
         return 'Missing values', 400
 
-    # create new transaction
+    # create a new Transaction
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
 
     response = {'message': f'Transaction will be added to Block {index}'}
@@ -224,7 +231,7 @@ def register_nodes():
 
     nodes = values.get('nodes')
     if nodes is None:
-        return "Error: invalid list of nodes", 400
+        return "Error: Please supply a valid list of nodes", 400
 
     for node in nodes:
         blockchain.register_node(node)
@@ -233,7 +240,6 @@ def register_nodes():
         'message': 'New nodes have been added',
         'total_nodes': list(blockchain.nodes),
     }
-
     return jsonify(response), 201
 
 
@@ -244,18 +250,17 @@ def consensus():
 
     if replaced:
         response = {
-            'message': 'the chain was replaced',
+            'message': 'Our chain was replaced',
             'new_chain': blockchain.chain
         }
     else:
         response = {
-            'message': 'the chain is authoritative',
+            'message': 'Our chain is authoritative',
             'chain': blockchain.chain
         }
 
     return jsonify(response), 200
 
 
-# server runs on port 5000
-if __name__=='__main__':
+if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
