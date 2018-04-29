@@ -1,10 +1,11 @@
-# Blockchian to managing the chain, storing transactions, adding new blocks
+# Blockchian to manage the chain, store transactions and add new blocks
+
 """
 block = {
     'index': ...
     'timestamp': ...
     'proof': ...
-    'previous_hash': ...
+    'previous_hash': ...  Immutability
     'transactions': [
         {
             'sender': ...
@@ -39,7 +40,7 @@ class Blockchain:
         # genesis block
         self.new_block(previous_hash='1', proof=100)
 
-    def new_block(self, proof, previous_hash):
+    def new_block(self, proof, previous_hash=None):
         # creates a new Block and adds it to the chain
         block = {
             'index': len(self.chain) + 1,
@@ -57,6 +58,7 @@ class Blockchain:
 
     def new_transaction(self, sender, recipient, amount):
         # adds a new transaction to the list of transactions
+        # go into the next mined Block
         self.current_transactions.append({
             'sender': sender,
             'recipient': recipient,
@@ -145,6 +147,8 @@ class Blockchain:
     @staticmethod
     def hash(block):
         # Hashes a Block with SHA-256 hash
+        # must make sure that the Dictionary is Ordered, 
+        # or we'll have inconsistent hashes
         block_string = json.dumps(block, sort_keys=True).encode()
         return hashlib.sha256(block_string).hexdigest()
 
