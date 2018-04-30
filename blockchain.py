@@ -160,6 +160,8 @@ class Blockchain:
         return guess_hash[:4] == "0000"
 
 
+# Blockchain as an API 
+
 # instantiate the Node
 app = Flask(__name__)
 
@@ -227,6 +229,9 @@ def full_chain():
     # status code: 200
     return jsonify(response), 200
 
+
+
+# Consensus
 
 # /nodes/register, adding neighbouring nodes
 @app.route('/nodes/register', methods=['POST'])
