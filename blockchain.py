@@ -36,6 +36,7 @@ class Blockchain:
         self.current_transactions = []
         self.chain = []
         self.nodes = set()
+        self.message_board = []
 
         # genesis block
         self.new_block(previous_hash='1', proof=100)
@@ -63,6 +64,17 @@ class Blockchain:
             'sender': sender,
             'recipient': recipient,
             'amount': amount,
+        })
+        # return index of the block which the transaction will be added to
+        return self.last_block['index'] + 1
+
+    def new_message(self, sender, recipient, message):
+        # adds a new transaction to the list of transactions
+        # go into the next mined Block
+        self.current_transactions.append({
+            'sender': sender,
+            'recipient': recipient,
+            'message': message,
         })
         # return index of the block which the transaction will be added to
         return self.last_block['index'] + 1
@@ -233,6 +245,22 @@ def new_transaction():
     # status code: 201
     return jsonify(response), 201
 
+# /message endpoint, POST request
+@app.route('/message', methods=['POST'])
+def message():
+    values = request.get_json()
+
+    # check the required fields are in the POST'ed data
+    required = ['sender', 'recipient', 'message']
+    if not all(k in values for k in required):
+        return 'Missing values', 400
+
+    # create a new Message
+    index = blockchain.new_message(values['sender'], values['recipient'], values['message'])
+
+    response = {'message': f'Message will be added to MsgBoard'}
+    # status code: 201
+    return jsonify(response), 201
 
 # /chain endpoint, return the full Blockchain
 @app.route('/chain', methods=['GET'])
@@ -243,9 +271,8 @@ def full_chain():
     }
     # status code: 200
     return jsonify(response), 200
+
 # /transactions/all endpoint, return all transactions
-
-
 @app.route('/transactions/all', methods=['GET'])
 def full_transactions():
     response = {
