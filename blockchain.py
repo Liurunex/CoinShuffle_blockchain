@@ -228,6 +228,17 @@ def full_chain():
     }
     # status code: 200
     return jsonify(response), 200
+# /transactions/all endpoint, return all transactions
+
+@app.route('/transactions/all', methods=['GET'])
+def full_transactions():
+    response = {
+        'transactions': blockchain.current_transactions,
+        'length': len(blockchain.current_transactions),
+    }
+    # status code: 200
+    return jsonify(response), 200
+
 
 
 
