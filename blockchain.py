@@ -159,6 +159,8 @@ class Blockchain:
         guess_hash = hashlib.sha256(guess).hexdigest()
         return guess_hash[:4] == "0000"
 
+# user node init
+coin = 0
 
 # Blockchain as an API 
 
@@ -185,6 +187,8 @@ def mine():
         recipient=node_identifier,
         amount=1,
     )
+    # self coin increase by 1
+    coin += 1
 
     # appending the new block into chain
     previous_hash = blockchain.hash(last_block)
@@ -200,6 +204,11 @@ def mine():
     # status code: 200
     return jsonify(response), 200
 
+'''
+transactions is allowed to initial from any address to others,
+should we set the limit that only self node address is allowed
+to new a transaction?
+'''
 
 # /transactions/new endpoint, POST request
 @app.route('/transactions/new', methods=['POST'])
@@ -262,7 +271,10 @@ def register_nodes():
     }
     return jsonify(response), 201
 
-
+'''
+Should we manually call resolve api everytime we made any changes
+on the blockchain ? or set it automatically
+'''
 # /nodes/resolve, resolving conflicts
 @app.route('/nodes/resolve', methods=['GET'])
 def consensus():
