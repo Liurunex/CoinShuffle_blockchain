@@ -26,6 +26,7 @@ from urllib.parse import urlparse
 from uuid import uuid4
 from time import time
 
+import argparse
 import requests
 import hashlib
 import json
@@ -175,12 +176,7 @@ class Blockchain:
         return guess_hash[:4] == "0000"
 
 
-
-
-
-
 # Blockchain as an API
-
 # instantiate the Node
 app = Flask(__name__)
 
@@ -228,13 +224,6 @@ def mine():
     return jsonify(response), 200
 
 
-'''
-transactions is allowed to initial from any address to others,
-should we set the limit that only self node address is allowed
-to new a transaction?
-'''
-
-
 # /transactions/new endpoint, POST request
 @app.route('/transactions/new', methods=['POST'])
 def new_transaction():
@@ -251,6 +240,7 @@ def new_transaction():
     response = {'message': f'Transaction will be added to Block {index}'}
     # status code: 201
     return jsonify(response), 201
+
 
 # /message endpoint, POST request
 @app.route('/message', methods=['POST'])
@@ -269,6 +259,7 @@ def message():
     # status code: 201
     return jsonify(response), 201
 
+
 # /board endpoint, GET request
 @app.route('/board', methods=['GET'])
 def board():
@@ -278,7 +269,8 @@ def board():
     # status code: 200
     return jsonify(response), 200
 
-# /chain endpoint, return the full Blockchain
+
+# /chain endpoint, return the full blockchain, GET request
 @app.route('/chain', methods=['GET'])
 def full_chain():
     response = {
@@ -289,7 +281,8 @@ def full_chain():
     # status code: 200
     return jsonify(response), 200
 
-# /transactions/all endpoint, return all transactions
+
+# /transactions/all endpoint, return all transactions, GET request
 @app.route('/transactions/all', methods=['GET'])
 def full_transactions():
     response = {
@@ -300,6 +293,7 @@ def full_transactions():
     return jsonify(response), 200
 
 
+# /nodes/neighbors endpoint, return all neighbors, GET request
 @app.route('/nodes/neighbors', methods=['GET'])
 def full_neighbors():
     response = {
@@ -312,7 +306,7 @@ def full_neighbors():
 
 # Consensus
 
-# /nodes/register, adding neighbouring nodes
+# /nodes/register, adding neighbouring nodes, POST request
 @app.route('/nodes/register', methods=['POST'])
 def register_nodes():
     values = request.get_json()
@@ -331,13 +325,7 @@ def register_nodes():
     return jsonify(response), 201
 
 
-'''
-Should we manually call resolve api everytime we made any changes
-on the blockchain ? or set it automatically
-'''
-
-
-# /nodes/resolve, resolving conflicts
+# /nodes/resolve, resolving conflicts, GET request
 @app.route('/nodes/resolve', methods=['GET'])
 def consensus():
     replaced = blockchain.resolve_conflicts()
@@ -356,10 +344,29 @@ def consensus():
     return jsonify(response), 200
 
 
+# CoinShuffle
+
+# /shuffle/process, encryption and post to next node, POST request
+@app.route('/shuffle/process', method=['POST'])
+def shuffle_process():
+    pass
+
+
+# /shuffle/result, get CoinShuffle result from CoinShuffle server, then make the transaction, POST request
+@app.route('/shuffle/get_result', method=['POST'])
+def get_result_transaction():
+    pass
+
+
+# /shuffle/send_address, send output address to sender, GET request
+@app.route('/shuffle/send_address', methods='GET')
+def send_address():
+    pass
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--port', default=5000, type=int, help='Input a unique port number')
+    parser.add_argument('-p', '--port', default=5001, type=int, help='Input a unique port number')
     args = parser.parse_args()
     port = args.port
 
