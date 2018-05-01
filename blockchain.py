@@ -175,6 +175,10 @@ class Blockchain:
         return guess_hash[:4] == "0000"
 
 
+
+
+
+
 # Blockchain as an API
 
 # instantiate the Node
@@ -280,6 +284,7 @@ def full_chain():
     response = {
         'chain': blockchain.chain,
         'length': len(blockchain.chain),
+        'nodes': list(blockchain.nodes)
     }
     # status code: 200
     return jsonify(response), 200
