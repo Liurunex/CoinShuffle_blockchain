@@ -411,15 +411,11 @@ def verify():
             res = True
             break
 
-    if res == False:
-        # rerun and find the malicious user
-        pass
-    else:
-        response = {
-            'message': f'{self_address} Verification Done',
-            'Result': True,
-        }
-        return jsonify(response), 201
+    response = {
+        'message': f'{self_address} Verification Done',
+        'Result': res,
+    }
+    return jsonify(response), 201
 
 
 

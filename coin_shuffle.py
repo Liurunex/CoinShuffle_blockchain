@@ -52,6 +52,24 @@ def trigger_func():
         })
 
 
+        # send result back to nodes to verify
+        verify_res = True
+        for index, node in enumerate(server.nodes):
+            response = requests.post(f'http://{node}/shuffle/verify', json={
+                'result_list' = shuffle_res
+            })
+            res = response.json()['Result']
+            if res == False:
+                verify_res = False
+        
+        # rerun and find the malicious user
+        if verify_res == False:
+            pass
+        else:
+            # start changing the transaction
+            pass
+
+
 scheduler = BackgroundScheduler()
 scheduler.start()
 scheduler.add_job(
