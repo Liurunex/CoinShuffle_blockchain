@@ -397,26 +397,31 @@ def shuffle_process():
     response = {'message': f'{self_address} Phase_2 Done'}
     return jsonify(response), 201
 
-
-# /shuffle/result, get CoinShuffle result from CoinShuffle server, then make the transaction, POST request
-@app.route('/shuffle/Phase_3', methods=['POST'])
-def get_result_transaction():
+# /shuffle/verify, get CoinShuffle result from CoinShuffle server, then verify and send back boolean, POST request
+@app.route('/shuffle/verify', methods=['POST'])
+def verify():
     values = request.get_json()
-    shuffle_res = values.get('shuffle_res')
+    shuffle_list = values.get('result_list')
+    if shuffle_list is None:
+        return "Error: Please supply a valid shuffle result", 400
 
-    flag = False
-    for encrypted_res in shuffle_res:
-        if NodeCrypto.decrypted_msg(blockchain.key_pair, encrypted_res) == self_address:
-            flag = True
+    res = False
+    for en_key in shuffle_list:
+        if NodeCrypto.decrypted_msg(blockchain.key_pair, en_key) == self_address:
+            res = True
             break
-    if flag == False:
+
+    if res == False:
+        # rerun and find the malicious user
         pass
     else:
-        # pass back to server
-        pass
+        response = {
+            'message': f'{self_address} Verification Done',
+            'Result': True,
+        }
+        return jsonify(response), 201
 
-    response = {'message': f'{self_address} Phase_3 Done'}
-    return jsonify(response), 201
+
 
 
 # /send_pubkey, send self public key to CoinShuffle Server, GET request
