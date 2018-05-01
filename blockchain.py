@@ -40,7 +40,7 @@ class Blockchain:
         self.nodes = set()
         self.message_board = []
         self.cs_address = 'http://127.0.0.1:5000'
-        self.key = None
+        self.key_pair = None
 
         # genesis block
         self.new_block(previous_hash='1', proof=100)
@@ -352,32 +352,56 @@ def consensus():
 # /shuffle/process, encryption and post to next node, POST request
 @app.route('/shuffle/process', methods=['POST'])
 def shuffle_process():
-    pass
+    print(self_address+" is doing shuffle")
+
+    values = request.get_json()
+    ordered_nodes = values.get('ordered_nodes')
+    public_keys = values.get('public_keys')
+    messages = values.get('messages')
+    if ordered_nodes is None or public_keys is None or messages is None:
+        return "Error: shuffle process received invalid json data", 400
+
+    # decode received message
+    output_address = NodeCrypto.encrypted_msg(public_keys[-1].encode(), self_address)
+    '''
+    for msg in message:
+        NodeCrypto.decrypted_msg(blockchain.key_pair)
+    
+    requests.post(f'http://{ordered_node[-1]}/shuffle/process', json={
+        'ordered_nodes': ordered_nodes,
+        'public_keys': server.public_keys,
+        'messages': messages
+    })
+    '''
+    response = {'msg': 'msg'}
+    return response, 201
 
 
 # /shuffle/result, get CoinShuffle result from CoinShuffle server, then make the transaction, POST request
 @app.route('/shuffle/get_result', methods=['POST'])
 def get_result_transaction():
-    pass
+    response = {'msg': 'msg'}
+    return response, 201
 
 
-# /shuffle/send_pkey, send self public key to , GET request
-@app.route('/shuffle/send_pubkey', methods=['GET'])
+# /send_pubkey, send self public key to , GET request
+@app.route('/send_pubkey', methods=['GET'])
 def send_pubkey():
-    blockchain.key = NodeCrypto.generate_keys()
+    blockchain.key_pair = NodeCrypto.generate_keys()
+    pubkey = NodeCrypto.public_key(blockchain.key_pair)
     response = {
-        'node': node_identifier,
-        'pubkey': NodeCrypto.publickey(blockchain.key)
+        'pubkey': pubkey.decode()
     }
     return jsonify(response), 200
 
 
-# /shuffle/send_address, send output address to sender, GET request
-@app.route('/shuffle/send_address', methods=['GET'])
+# /send_address, send output address to sender, GET request
+@app.route('/send_address', methods=['GET'])
 def send_address():
-    # should first check if blockchain transaction board has the involved transaction
+    # should first check if BlockChain's transaction board has the involved transaction
+    output_address = NodeCrypto.encrypted_msg(self_address, NodeCrypto.pubkey(blockchain.key_pair))
     response = {
-        'address': NodeCrypto.encryption(self_address, blockchain.pkey),
+        'address': output_address,
     }
     return jsonify(response), 200
 
@@ -389,5 +413,12 @@ if __name__ == '__main__':
     port = args.port
     self_address = '127.0.0.1:' + str(port)
     requests.post(url=blockchain.cs_address + '/initial/nodes', json={'node': self_address})
+
+    '''
+    test_list = [1, "fadfd", 21312, "fasdfds"]
+    print("-------BC node")
+    print(type(test_list))
+    requests.post(url=blockchain.cs_address + '/test', json={'message': test_list})
+    '''
 
     app.run(host='0.0.0.0', port=port)
