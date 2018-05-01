@@ -1,7 +1,11 @@
 import numpy as np
 import json
-from flask import Flask, jsonify, request
 import requests
+import atexit
+import time
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
+from flask import Flask, jsonify, request
 
 
 # CoinShuffle
@@ -14,9 +18,24 @@ class CoinShuffleClient:
         self.shuffle_flag = False
 
 
+def trigger_func():
+    print("test")
+    print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+
+
 # initial the CoinShuffle server
 app = Flask(__name__)
 server = CoinShuffleClient()
+
+scheduler = BackgroundScheduler()
+scheduler.start()
+scheduler.add_job(
+    func=trigger_func,
+    trigger=IntervalTrigger(seconds=2),
+    id='CoinShuffle_job',
+    name='CoinShuffle periodical job',
+    replace_existing=True)
+atexit.register(lambda: scheduler.shutdown())
 
 
 @app.route('/initial/nodes', methods=['POST'])
@@ -25,7 +44,7 @@ def add_nodes():
 
     node = values.get('node')
     if node is None:
-        return "Error: Please supply a valid list of nodes", 400
+        return "Error: CoinShuffle Server: Please supply a valid list of nodes", 400
 
     server.nodes.append(node)
 

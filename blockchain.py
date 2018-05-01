@@ -349,8 +349,6 @@ def consensus():
 
 
 # CoinShuffle
-
-
 # /shuffle/process, encryption and post to next node, POST request
 @app.route('/shuffle/process', methods=['POST'])
 def shuffle_process():
