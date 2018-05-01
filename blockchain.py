@@ -376,6 +376,11 @@ def shuffle_process():
     response = {'msg': 'msg'}
     return response, 201
 
+# /shuffle/result, send CoinShuffle result to CoinShuffle server, POST request
+@app.route('/shuffle/send_result', methods=['POST'])
+def send_result():
+    response = {'msg': 'msg'}
+    return response, 201
 
 # /shuffle/result, get CoinShuffle result from CoinShuffle server, then make the transaction, POST request
 @app.route('/shuffle/get_result', methods=['POST'])

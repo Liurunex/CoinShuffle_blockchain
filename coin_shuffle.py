@@ -10,7 +10,7 @@ from flask import Flask, jsonify, request
 
 
 # CoinShuffle
-class CoinShuffleClient:
+class CoinShuffleServer:
     def __init__(self):
         self.nodes = list()
         self.public_keys = list()
@@ -21,7 +21,7 @@ class CoinShuffleClient:
 
 # initial the CoinShuffle server
 app = Flask(__name__)
-server = CoinShuffleClient()
+server = CoinShuffleServer()
 
 
 def trigger_func():
@@ -81,12 +81,6 @@ def add_nodes():
     print(list(server.nodes))
     return jsonify(response), 201
 
-
-# /shuffle/result, send CoinShuffle result to CoinShuffle server, POST request
-@app.route('/shuffle/send_result', methods=['POST'])
-def send_result():
-    response = {'msg': 'msg'}
-    return response, 201
 
 
 @app.route('/test', methods=['POST'])
