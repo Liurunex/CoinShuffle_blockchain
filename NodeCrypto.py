@@ -37,10 +37,11 @@ if __name__ == '__main__':
 
     #dmsg = decryption(key_2, emsg)
     #dmsg = decryption(key_1, dmsg)
-    dmsg = hu(msg)
+    dmsg = hexlify(msg)
 
     print(dmsg == msg)
     print(dmsg)
+    print(msg)
     # json hexlify result test
     '''
     atest = []
