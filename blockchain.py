@@ -40,7 +40,7 @@ class Blockchain:
         self.nodes = set()
         self.message_board = []
         self.cs_address = 'http://127.0.0.1:5000'
-        self.pkey = NodeCrypto.generate_keys()
+        self.pubkey = NodeCrypto.generate_keys()
 
         # genesis block
         self.new_block(previous_hash='1', proof=100)
