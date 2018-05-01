@@ -2,8 +2,6 @@ from Crypto import Random
 from Crypto.PublicKey import RSA
 from binascii import hexlify, unhexlify
 
-import json
-
 
 def generate_keys():
     random_gen = Random.new().read

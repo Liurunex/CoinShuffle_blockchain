@@ -26,6 +26,7 @@ from urllib.parse import urlparse
 from uuid import uuid4
 from time import time
 
+import random
 import argparse
 import requests
 import hashlib
@@ -350,47 +351,76 @@ def consensus():
 
 # CoinShuffle
 # /shuffle/process, encryption and post to next node, POST request
-@app.route('/shuffle/process', methods=['POST'])
+@app.route('/shuffle/Phase_2', methods=['POST'])
 def shuffle_process():
     print(self_address+" is doing shuffle")
 
     values = request.get_json()
+    current_index = values.get('current_index')
     ordered_nodes = values.get('ordered_nodes')
     public_keys = values.get('public_keys')
-    messages = values.get('messages')
-    if ordered_nodes is None or public_keys is None or messages is None:
+    shuffle_message = values.get('shuffle_message')
+
+    if ordered_nodes is None or public_keys is None or shuffle_message is None:
         return "Error: shuffle process received invalid json data", 400
 
     # decode received message
-    output_address = NodeCrypto.encrypted_msg(public_keys[-1].encode(), self_address)
-    '''
-    for msg in message:
-        NodeCrypto.decrypted_msg(blockchain.key_pair)
-    
-    requests.post(f'http://{ordered_node[-1]}/shuffle/process', json={
-        'ordered_nodes': ordered_nodes,
-        'public_keys': server.public_keys,
-        'messages': messages
-    })
-    '''
-    response = {'msg': 'msg'}
-    return response, 201
+    for i, msg in enumerate(shuffle_message):
+        shuffle_message[i] = NodeCrypto.decrypted_msg(blockchain.key_pair, msg)
 
-# /shuffle/result, send CoinShuffle result to CoinShuffle server, POST request
-@app.route('/shuffle/send_result', methods=['POST'])
-def send_result():
-    response = {'msg': 'msg'}
-    return response, 201
+    # encode self address
+    output_address = NodeCrypto.encrypted_msg(public_keys[-1].encode(), self_address)
+
+    for index, node in reversed(list(enumerate(ordered_nodes))):
+        if node == self_address:
+            break
+        else:
+            output_address = NodeCrypto.encrypted_msg(public_keys[index].encode(), output_address)
+
+    # permutation shuffle
+    shuffle_message.append(output_address)
+    random.shuffle(shuffle_message)
+
+    # Post to next node for shuffle
+    current_index += 1
+    if current_index == len(ordered_nodes):
+        # shuffle done, send results to CoinShuffle Server
+        requests.post(url=blockchain.cs_address + '/shuffle/coin_shuffle_res', json={'shuffle_res': shuffle_message})
+    else:
+        requests.post(f'http://{ordered_nodes[current_index]}/shuffle/Phase_2', json={
+            'current_index': current_index,
+            'ordered_nodes': ordered_nodes,
+            'public_keys': public_keys,
+            'shuffle_message': shuffle_message
+        })
+
+    response = {'message': f'{self_address} Phase_2 Done'}
+    return jsonify(response), 201
+
 
 # /shuffle/result, get CoinShuffle result from CoinShuffle server, then make the transaction, POST request
-@app.route('/shuffle/get_result', methods=['POST'])
+@app.route('/shuffle/Phase_3', methods=['POST'])
 def get_result_transaction():
-    response = {'msg': 'msg'}
-    return response, 201
+    values = request.get_json()
+    shuffle_res = values.get('shuffle_res')
+
+    flag = False
+    for encrypted_res in shuffle_res:
+        if NodeCrypto.decrypted_msg(blockchain.key_pair, encrypted_res) == self_address:
+            flag = True
+            break
+    if flag == False:
+        pass
+    else:
+        # pass back to server
+        pass
+
+    response = {'message': f'{self_address} Phase_3 Done'}
+    return jsonify(response), 201
 
 
-# /send_pubkey, send self public key to , GET request
-@app.route('/send_pubkey', methods=['GET'])
+# /send_pubkey, send self public key to CoinShuffle Server, GET request
+@app.route('/shuffle/Phase_1', methods=['GET'])
 def send_pubkey():
     blockchain.key_pair = NodeCrypto.generate_keys()
     pubkey = NodeCrypto.public_key(blockchain.key_pair)

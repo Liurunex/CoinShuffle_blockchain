@@ -32,10 +32,10 @@ def trigger_func():
         # reset pub_keys
         server.shuffle_flag = True
         for index, node in enumerate(server.nodes):
-            response = requests.get(f'http://{node}/send_pubkey')
+            response = requests.get(f'http://{node}/shuffle/Phase_1')
             pub_key_str = response.json()['pubkey']
             server.public_keys[index] = pub_key_str
-        # start the shuffling by picking a random node: it's the last encryption node
+        # start the shuffling by picking a random node to start
         index = random.randint(0, len(server.nodes)-1)
         ordered_nodes = []
         while len(ordered_nodes) != len(server.nodes):
@@ -43,11 +43,12 @@ def trigger_func():
             index += 1
             if index == len(server.nodes):
                 index = 0
-        messages = []
-        requests.post(f'http://{ordered_node[-1]}/shuffle/process', json={
+        shuffle_message = []
+        requests.post(f'http://{ordered_nodes[0]}/shuffle/Phase_2', json={
+            'current_index': 0,
             'ordered_nodes': ordered_nodes,
             'public_keys': server.public_keys,
-            'messages': messages
+            'shuffle_message': shuffle_message
         })
 
 
@@ -81,6 +82,18 @@ def add_nodes():
     print(list(server.nodes))
     return jsonify(response), 201
 
+
+# /shuffle/result, CoinShuffle received result from node, POST request
+@app.route('/shuffle/coin_shuffle_res', methods=['POST'])
+def receive_result():
+    values = request.get_json()
+    shuffle_res = values.get('shuffle_res')
+
+    for node in server.nodes:
+        requests.post(f'http://{node}/shuffle/Phase_3', json={'shuffle_res': shuffle_res})
+
+    response = {'msg': 'CoinShuffle Phase 2 Done'}
+    return jsonify(response), 201
 
 
 @app.route('/test', methods=['POST'])
