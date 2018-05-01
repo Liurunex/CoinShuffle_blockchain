@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9794d503-a7f6-4111-a94b-959638ba463c" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/NodeCrypto.py" afterPath="$PROJECT_DIR$/NodeCrypto.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/blockchain.py" afterPath="$PROJECT_DIR$/blockchain.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/coin_shuffle.py" afterPath="$PROJECT_DIR$/coin_shuffle.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,20 +18,23 @@
       <file leaf-file-name="coin_shuffle.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/coin_shuffle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="303">
-              <caret line="89" column="43" lean-forward="false" selection-start-line="89" selection-start-column="43" selection-end-line="89" selection-end-column="43" />
+            <state relative-caret-position="135">
+              <caret line="27" column="10" lean-forward="false" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
               <folding>
+                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#1989#2472#0" expanded="false" />
+                <element signature="e#2630#2909#0" expanded="false" />
                 <element signature="e#2966#3184#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="blockchain.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="blockchain.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/blockchain.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="586">
-              <caret line="397" column="33" lean-forward="true" selection-start-line="397" selection-start-column="33" selection-end-line="397" selection-end-column="33" />
+            <state relative-caret-position="-16">
+              <caret line="333" column="25" lean-forward="true" selection-start-line="333" selection-start-column="25" selection-end-line="333" selection-end-column="25" />
               <folding>
                 <element signature="e#73#419#1" expanded="false" />
                 <element signature="e#420#461#0" expanded="true" />
@@ -55,18 +58,18 @@
                 <element signature="e#8723#8878#0" expanded="false" />
                 <element signature="e#9027#9390#0" expanded="false" />
                 <element signature="e#9511#9859#0" expanded="false" />
-                <element signature="e#12806#13081#0" expanded="false" />
-                <element signature="e#13443#13640#1" expanded="false" />
+                <element signature="e#12797#13072#0" expanded="false" />
+                <element signature="e#13434#13631#1" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NodeCrypto.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="NodeCrypto.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/NodeCrypto.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+            <state relative-caret-position="572">
+              <caret line="39" column="13" lean-forward="false" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="13" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
@@ -102,6 +105,7 @@
       <find>CoinShuffleServer</find>
       <find>messages</find>
       <find>message</find>
+      <find>encode</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -110,9 +114,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/NodeCrypto.py" />
         <option value="$PROJECT_DIR$/coin_shuffle.py" />
         <option value="$PROJECT_DIR$/blockchain.py" />
+        <option value="$PROJECT_DIR$/NodeCrypto.py" />
       </list>
     </option>
   </component>
@@ -278,6 +282,9 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#1989#2472#0" expanded="false" />
+            <element signature="e#2630#2909#0" expanded="false" />
             <element signature="e#2966#3184#0" expanded="false" />
           </folding>
         </state>
@@ -310,8 +317,8 @@
             <element signature="e#8723#8878#0" expanded="false" />
             <element signature="e#9027#9390#0" expanded="false" />
             <element signature="e#9511#9859#0" expanded="false" />
-            <element signature="e#12806#13081#0" expanded="false" />
-            <element signature="e#13443#13640#1" expanded="false" />
+            <element signature="e#12797#13072#0" expanded="false" />
+            <element signature="e#13434#13631#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -353,8 +360,8 @@
             <element signature="e#8723#8878#0" expanded="false" />
             <element signature="e#9027#9390#0" expanded="false" />
             <element signature="e#9511#9859#0" expanded="false" />
-            <element signature="e#12806#13081#0" expanded="false" />
-            <element signature="e#13443#13640#1" expanded="false" />
+            <element signature="e#12797#13072#0" expanded="false" />
+            <element signature="e#13434#13631#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -386,8 +393,8 @@
             <element signature="e#8723#8878#0" expanded="false" />
             <element signature="e#9027#9390#0" expanded="false" />
             <element signature="e#9511#9859#0" expanded="false" />
-            <element signature="e#12806#13081#0" expanded="false" />
-            <element signature="e#13443#13640#1" expanded="false" />
+            <element signature="e#12797#13072#0" expanded="false" />
+            <element signature="e#13434#13631#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -419,8 +426,8 @@
             <element signature="e#8723#8878#0" expanded="false" />
             <element signature="e#9027#9390#0" expanded="false" />
             <element signature="e#9511#9859#0" expanded="false" />
-            <element signature="e#12806#13081#0" expanded="false" />
-            <element signature="e#13443#13640#1" expanded="false" />
+            <element signature="e#12797#13072#0" expanded="false" />
+            <element signature="e#13434#13631#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -452,8 +459,8 @@
             <element signature="e#8723#8878#0" expanded="false" />
             <element signature="e#9027#9390#0" expanded="false" />
             <element signature="e#9511#9859#0" expanded="false" />
-            <element signature="e#12806#13081#0" expanded="false" />
-            <element signature="e#13443#13640#1" expanded="false" />
+            <element signature="e#12797#13072#0" expanded="false" />
+            <element signature="e#13434#13631#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -485,8 +492,8 @@
             <element signature="e#8723#8878#0" expanded="false" />
             <element signature="e#9027#9390#0" expanded="false" />
             <element signature="e#9511#9859#0" expanded="false" />
-            <element signature="e#12806#13081#0" expanded="false" />
-            <element signature="e#13443#13640#1" expanded="false" />
+            <element signature="e#12797#13072#0" expanded="false" />
+            <element signature="e#13434#13631#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -518,50 +525,20 @@
             <element signature="e#8723#8878#0" expanded="false" />
             <element signature="e#9027#9390#0" expanded="false" />
             <element signature="e#9511#9859#0" expanded="false" />
-            <element signature="e#12806#13081#0" expanded="false" />
-            <element signature="e#13443#13640#1" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/blockchain.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="586">
-          <caret line="397" column="33" lean-forward="true" selection-start-line="397" selection-start-column="33" selection-end-line="397" selection-end-column="33" />
-          <folding>
-            <element signature="e#73#419#1" expanded="false" />
-            <element signature="e#420#461#0" expanded="true" />
-            <element signature="e#657#5395#0" expanded="false" />
-            <element signature="e#1017#1461#0" expanded="false" />
-            <element signature="e#1529#1889#0" expanded="false" />
-            <element signature="e#1954#2309#0" expanded="false" />
-            <element signature="e#2344#2370#0" expanded="false" />
-            <element signature="e#2421#2629#0" expanded="false" />
-            <element signature="e#2677#2951#0" expanded="false" />
-            <element signature="e#2995#3644#0" expanded="false" />
-            <element signature="e#3687#4615#0" expanded="false" />
-            <element signature="e#4730#4797#0" expanded="false" />
-            <element signature="e#5183#5392#0" expanded="false" />
-            <element signature="e#5801#6563#0" expanded="false" />
-            <element signature="e#6686#7163#0" expanded="false" />
-            <element signature="e#7260#7722#0" expanded="false" />
-            <element signature="e#7811#7934#0" expanded="false" />
-            <element signature="e#8056#8247#0" expanded="false" />
-            <element signature="e#8395#8583#0" expanded="false" />
-            <element signature="e#8723#8878#0" expanded="false" />
-            <element signature="e#9027#9390#0" expanded="false" />
-            <element signature="e#9511#9859#0" expanded="false" />
-            <element signature="e#12806#13081#0" expanded="false" />
-            <element signature="e#13443#13640#1" expanded="false" />
+            <element signature="e#12797#13072#0" expanded="false" />
+            <element signature="e#13434#13631#1" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/coin_shuffle.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="89" column="43" lean-forward="false" selection-start-line="89" selection-start-column="43" selection-end-line="89" selection-end-column="43" />
+        <state relative-caret-position="135">
+          <caret line="27" column="10" lean-forward="false" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
           <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#1989#2472#0" expanded="false" />
+            <element signature="e#2630#2909#0" expanded="false" />
             <element signature="e#2966#3184#0" expanded="false" />
           </folding>
         </state>
@@ -569,10 +546,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/NodeCrypto.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+        <state relative-caret-position="572">
+          <caret line="39" column="13" lean-forward="false" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="13" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/blockchain.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-16">
+          <caret line="333" column="25" lean-forward="true" selection-start-line="333" selection-start-column="25" selection-end-line="333" selection-end-column="25" />
+          <folding>
+            <element signature="e#73#419#1" expanded="false" />
+            <element signature="e#420#461#0" expanded="true" />
+            <element signature="e#657#5395#0" expanded="false" />
+            <element signature="e#1017#1461#0" expanded="false" />
+            <element signature="e#1529#1889#0" expanded="false" />
+            <element signature="e#1954#2309#0" expanded="false" />
+            <element signature="e#2344#2370#0" expanded="false" />
+            <element signature="e#2421#2629#0" expanded="false" />
+            <element signature="e#2677#2951#0" expanded="false" />
+            <element signature="e#2995#3644#0" expanded="false" />
+            <element signature="e#3687#4615#0" expanded="false" />
+            <element signature="e#4730#4797#0" expanded="false" />
+            <element signature="e#5183#5392#0" expanded="false" />
+            <element signature="e#5801#6563#0" expanded="false" />
+            <element signature="e#6686#7163#0" expanded="false" />
+            <element signature="e#7260#7722#0" expanded="false" />
+            <element signature="e#7811#7934#0" expanded="false" />
+            <element signature="e#8056#8247#0" expanded="false" />
+            <element signature="e#8395#8583#0" expanded="false" />
+            <element signature="e#8723#8878#0" expanded="false" />
+            <element signature="e#9027#9390#0" expanded="false" />
+            <element signature="e#9511#9859#0" expanded="false" />
+            <element signature="e#12797#13072#0" expanded="false" />
+            <element signature="e#13434#13631#1" expanded="false" />
           </folding>
         </state>
       </provider>

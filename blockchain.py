@@ -425,7 +425,7 @@ def send_pubkey():
     blockchain.key_pair = NodeCrypto.generate_keys()
     pubkey = NodeCrypto.public_key(blockchain.key_pair)
     response = {
-        'pubkey': pubkey.decode()
+        'pubkey': pubkey
     }
     return jsonify(response), 200
 

@@ -10,7 +10,7 @@ def generate_keys():
 
 def public_key(keys):
     res_key = hexlify(keys.publickey().exportKey('DER'))
-    return res_key
+    return res_key.decode()
 
 
 def encryption(p_key, data):
@@ -25,13 +25,24 @@ def decryption(keys, e_msg):
 
 if __name__ == '__main__':
     # Crypto Test
-    keypair = generate_keys()
-    pubkey = public_key(keypair)
-    msg = "127.0.0.1:5001dasddas"
-    print('-------\n pubkey:' + str(pubkey))
-    #print('-------\n msg is : ' + msg)
+    key_1 = generate_keys()
+    key_2 = generate_keys()
+    msg = "127.0.0.1:5001"
 
+    pk_1 = public_key(key_1)
+    pk_2 = public_key(key_2)
+
+    #emsg = encryption(pk_1.encode(), msg)
+    #emsg = encryption(pk_2.encode(), emsg)
+
+    #dmsg = decryption(key_2, emsg)
+    #dmsg = decryption(key_1, dmsg)
+    dmsg = hu(msg)
+
+    print(dmsg == msg)
+    print(dmsg)
     # json hexlify result test
+    '''
     atest = []
     atest.append(pubkey)
     bstr = pubkey.decode()
@@ -42,3 +53,4 @@ if __name__ == '__main__':
     decrypted_msg = decryption(keypair, encrypted_msg)
     print('-------\n encrypted res: ' + str(encrypted_msg))
     print('-------\n decrypted res: ' + decrypted_msg)
+    '''
