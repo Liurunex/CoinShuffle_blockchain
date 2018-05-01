@@ -71,13 +71,16 @@ class Blockchain:
     def new_message(self, sender, recipient, message):
         # adds a new transaction to the list of transactions
         # go into the next mined Block
-        self.current_transactions.append({
+        self.message_board.append({
             'sender': sender,
             'recipient': recipient,
             'message': message,
         })
         # return index of the block which the transaction will be added to
         return self.last_block['index'] + 1
+
+    def msg_board(self):
+        return self.message_board;
 
     def proof_of_work(self, last_block):
         last_proof = last_block['proof']
@@ -261,6 +264,15 @@ def message():
     response = {'message': f'Message will be added to MsgBoard'}
     # status code: 201
     return jsonify(response), 201
+
+# /board endpoint, GET request
+@app.route('/board', methods=['GET'])
+def board():
+    board = blockchain.msg_board();
+    response = {'message': board}
+
+    # status code: 200
+    return jsonify(response), 200
 
 # /chain endpoint, return the full Blockchain
 @app.route('/chain', methods=['GET'])
