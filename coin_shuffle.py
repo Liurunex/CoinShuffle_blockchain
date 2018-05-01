@@ -1,31 +1,17 @@
 import numpy as np
 import json
-import NodeCrypto
 from flask import Flask, jsonify, request
-from Crypto import Random
-from Crypto.PublicKey import RSA
-from binascii import hexlify, unhexlify
 import requests
 
+
 # CoinShuffle
-
-
-def generate_keypair():
-    random_gen = Random.new().read
-    return RSA.generate(1024, random_gen)
-
-
-def public_key(keypair):
-    return hexlify(keypair.publickey().exportKey('DER'))
-
-
 class CoinShuffleClient:
     def __init__(self):
-        self.keypair = NodeCrypto.generate_key()
-        self.ek = NodeCrypto.public_key(self.keypair)
-
-    def submit_ek_to_server(self, addr):
-        requests.post(addr + '/coinshuffle/submitkey', data = {'public_key' : self.ek, 'address' : self.addr})
+        self.nodes = list()
+        self.public_keys = list()
+        # trigger list shuffle
+        self.shuffle_order = list()
+        self.shuffle_flag = False
 
 
 # initial the CoinShuffle server
@@ -33,8 +19,26 @@ app = Flask(__name__)
 server = CoinShuffleClient()
 
 
+@app.route('/initial/nodes', methods=['POST'])
+def add_nodes():
+    values = request.get_json()
+
+    node = values.get('node')
+    if node is None:
+        return "Error: Please supply a valid list of nodes", 400
+
+    server.nodes.append(node)
+
+    response = {
+        'message': 'CoinShuffle Server: new nodes have been added',
+        'total_nodes': list(server.nodes),
+    }
+    print(list(server.nodes))
+    return jsonify(response), 201
+
+
 # /shuffle/result, send CoinShuffle result to CoinShuffle server, POST request
-@app.route('/shuffle/send_result', method=['POST'])
+@app.route('/shuffle/send_result', methods=['POST'])
 def send_result():
     pass
 

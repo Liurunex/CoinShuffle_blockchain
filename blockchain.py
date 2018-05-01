@@ -40,7 +40,7 @@ class Blockchain:
         self.nodes = set()
         self.message_board = []
         self.cs_address = 'http://127.0.0.1:5000'
-        self.pubkey = NodeCrypto.generate_keys()
+        self.key = None
 
         # genesis block
         self.new_block(previous_hash='1', proof=100)
@@ -350,24 +350,26 @@ def consensus():
 
 # CoinShuffle
 
+
 # /shuffle/process, encryption and post to next node, POST request
-@app.route('/shuffle/process', method=['POST'])
+@app.route('/shuffle/process', methods=['POST'])
 def shuffle_process():
     pass
 
 
 # /shuffle/result, get CoinShuffle result from CoinShuffle server, then make the transaction, POST request
-@app.route('/shuffle/get_result', method=['POST'])
+@app.route('/shuffle/get_result', methods=['POST'])
 def get_result_transaction():
     pass
 
 
 # /shuffle/send_pkey, send self public key to , GET request
-@app.route('/shuffle/send_pkey', methods=['GET'])
-def send_pkey():
+@app.route('/shuffle/send_pubkey', methods=['GET'])
+def send_pubkey():
+    blockchain.key = NodeCrypto.generate_keys()
     response = {
-        # may be need to be encode somehow
-        'pkey': blockchain.pkey
+        'node': node_identifier,
+        'pubkey': NodeCrypto.publickey(blockchain.key)
     }
     return jsonify(response), 200
 
@@ -387,7 +389,7 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--port', default=5001, type=int, help='Input a unique port number')
     args = parser.parse_args()
     port = args.port
-    global self_address
-    self_address = '127.0.0.1:' + port
+    self_address = '127.0.0.1:' + str(port)
+    requests.post(url=blockchain.cs_address + '/initial/nodes', json={'node': self_address})
 
-    app.run(host='0.0.0.0', port=port) 
+    app.run(host='0.0.0.0', port=port)
