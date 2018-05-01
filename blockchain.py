@@ -30,6 +30,7 @@ import argparse
 import requests
 import hashlib
 import json
+import NodeCrypto
 
 
 class Blockchain:
@@ -38,6 +39,8 @@ class Blockchain:
         self.chain = []
         self.nodes = set()
         self.message_board = []
+        self.cs_address = 'http://127.0.0.1:5000'
+        self.pkey = NodeCrypto.generate_keys()
 
         # genesis block
         self.new_block(previous_hash='1', proof=100)
@@ -188,6 +191,7 @@ blockchain = Blockchain()
 
 # user node init
 self_coin = 0
+self_address = ''
 # key(timestamp, sender, recipient), value (msg)
 message_board = dict()
 
@@ -358,10 +362,24 @@ def get_result_transaction():
     pass
 
 
+# /shuffle/send_pkey, send self public key to , GET request
+@app.route('/shuffle/send_pkey', methods=['GET'])
+def send_pkey():
+    response = {
+        # may be need to be encode somehow
+        'pkey': blockchain.pkey
+    }
+    return jsonify(response), 200
+
+
 # /shuffle/send_address, send output address to sender, GET request
-@app.route('/shuffle/send_address', methods='GET')
+@app.route('/shuffle/send_address', methods=['GET'])
 def send_address():
-    pass
+    # should first check if blockchain transaction board has the involved transaction
+    response = {
+        'address': NodeCrypto.encryption(self_address, blockchain.pkey),
+    }
+    return jsonify(response), 200
 
 
 if __name__ == '__main__':
@@ -369,5 +387,7 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--port', default=5001, type=int, help='Input a unique port number')
     args = parser.parse_args()
     port = args.port
+    global self_address
+    self_address = '127.0.0.1:' + port
 
     app.run(host='0.0.0.0', port=port) 
