@@ -412,15 +412,19 @@ def verify():
 
     res = False
     for msg in shuffle_list:
-        dmsg = NodeCrypto.decryption(blockchain.key_pair, msg.encode())
-        if unhexlify(dmsg.encode()).decode() == self_address:
-            res = True
-            break
-
+        try:
+            dmsg = NodeCrypto.decryption(blockchain.key_pair, msg.encode())
+            if unhexlify(dmsg.encode()).decode() == self_address:
+                res = True
+                break
+        except UnicodeDecodeError:
+            print("DAMN----------Unicode Error")
+        except ValueError:
+            print("DAMN----------Value Error")
     print(f'Node {self_address} verification result {res}')
     response = {
         'message': f'{self_address} Verification Done',
-        'Result': res,
+        'Result': res
     }
     return jsonify(response), 201
 

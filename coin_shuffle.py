@@ -15,6 +15,7 @@ class CoinShuffleServer:
         # trigger list shuffle
         self.shuffle_order = list()
         self.shuffle_flag = False
+        self.shuffle_res = None
 
 
 # initial the CoinShuffle server
@@ -23,7 +24,7 @@ server = CoinShuffleServer()
 
 
 def trigger_func():
-    if len(server.nodes) < 3:
+    if len(server.nodes) < 2:
         print("CoinShuffle trigger: ")
         print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
     else:
@@ -43,6 +44,11 @@ def trigger_func():
             index += 1
             if index == len(server.nodes):
                 index = 0
+
+        # send the shuffle to first node
+
+        print(f"CoinShuffle Server: send initial shuffle request to {ordered_nodes[0]}")
+        print(ordered_nodes)
         shuffle_message = []
         requests.post(url=f'http://{ordered_nodes[0]}/shuffle/Phase_2', json={
             'current_index': 0,
@@ -50,7 +56,29 @@ def trigger_func():
             'public_keys': server.public_keys,
             'shuffle_message': shuffle_message
         })
-        print(f"CoinShuffle Server: send initial shuffle request to {ordered_nodes[0]}")
+
+        print(f"CoinShuffle Server: start verification")
+
+        # send result back to nodes to verify
+        verify_res = True
+        print(server.shuffle_res)
+        for node in server.nodes:
+            print(f'{node} try to do verify')
+            response = requests.post(url=f'http://{node}/shuffle/verify', json={'result_list': server.shuffle_res})
+            res = response.json()['Result']
+            if res is False:
+                verify_res = False
+                break
+
+        # rerun and find the malicious user
+        if verify_res is False:
+            print("CoinShuffle Server: Verification failed")
+        else:
+            # start creating the shuffled transaction
+            print("CoinShuffle Server: Verification done, transaction phase enter")
+
+        server.shuffle_flag = False
+        print(f'CoinShuffle Server: Phase 3 Done as {verify_res}')
 
 
 scheduler = BackgroundScheduler()
@@ -90,26 +118,11 @@ def add_nodes():
 def receive_result():
     values = request.get_json()
     shuffle_res = values.get('shuffle_res')
+    server.shuffle_res = shuffle_res
     print("CoinShuffle Server: received shuffled result, start Phase_3 ")
     print(shuffle_res)
-    # send result back to nodes to verify
-    verify_res = True
-    for node in server.nodes:
-        response = requests.post(url=f'http://{node}/shuffle/verify', json={'result_list': shuffle_res})
-        res = response.json()['Result']
-        if res is False:
-            verify_res = False
-            break
 
-    # rerun and find the malicious user
-    if verify_res is False:
-        print("CoinShuffle Server: Verification failed")
-    else:
-        # start creating the shuffled transaction
-        print("CoinShuffle Server: Verification done, transaction phase enter")
-
-    print('CoinShuffle Server: Phase 3 Done')
-    response = {'msg': 'CoinShuffle Phase 3 Done'}
+    response = {'msg': 'CoinShuffle Server: wait for verification'}
     return jsonify(response), 201
 
 
