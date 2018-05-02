@@ -357,7 +357,7 @@ def consensus():
 # /shuffle/process, encryption and post to next node, POST request
 @app.route('/shuffle/Phase_2', methods=['POST'])
 def shuffle_process():
-    print(self_address+" is doing shuffle")
+    print(f'Node {self_address} is doing shuffle Phase_2')
 
     values = request.get_json()
     current_index = values.get('current_index')
@@ -397,6 +397,7 @@ def shuffle_process():
             'shuffle_message': shuffle_message
         })
 
+    print(f'Node {self_address} finished shuffle Phase_2')
     response = {'message': f'{self_address} Phase_2 Done'}
     return jsonify(response), 201
 
@@ -416,6 +417,7 @@ def verify():
             res = True
             break
 
+    print(f'Node {self_address} verification result {res}')
     response = {
         'message': f'{self_address} Verification Done',
         'Result': res,
@@ -431,6 +433,7 @@ def send_pubkey():
     response = {
         'pubkey': pubkey
     }
+    print(f'Node {self_address} send public key')
     return jsonify(response), 200
 
 

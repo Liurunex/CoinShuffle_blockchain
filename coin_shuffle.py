@@ -1,5 +1,3 @@
-import numpy as np
-import json
 import requests
 import atexit
 import time
@@ -35,6 +33,8 @@ def trigger_func():
             response = requests.get(f'http://{node}/shuffle/Phase_1')
             pub_key_str = response.json()['pubkey']
             server.public_keys[index] = pub_key_str
+        print('CoinShuffle Server: Phase 1 done')
+
         # start the shuffling by picking a random node to start
         index = random.randint(0, len(server.nodes)-1)
         ordered_nodes = []
@@ -50,6 +50,7 @@ def trigger_func():
             'public_keys': server.public_keys,
             'shuffle_message': shuffle_message
         })
+        print(f"CoinShuffle Server: send initial shuffle request to {ordered_nodes[0]}")
 
 
 scheduler = BackgroundScheduler()
@@ -79,6 +80,7 @@ def add_nodes():
         'message': 'CoinShuffle Server: new nodes have been added',
         'total_nodes': list(server.nodes),
     }
+    print(f"CoinShuffle Server: received a node {node}")
     print(list(server.nodes))
     return jsonify(response), 201
 
@@ -88,7 +90,7 @@ def add_nodes():
 def receive_result():
     values = request.get_json()
     shuffle_res = values.get('shuffle_res')
-    print("CoinShuffle Server received Results: ")
+    print("CoinShuffle Server: received shuffled result, start Phase_3 ")
     print(shuffle_res)
     # send result back to nodes to verify
     verify_res = True
@@ -101,11 +103,12 @@ def receive_result():
 
     # rerun and find the malicious user
     if verify_res is False:
-        print("Verification failed")
+        print("CoinShuffle Server: Verification failed")
     else:
         # start creating the shuffled transaction
-        print("Verification done, transaction phase enter")
+        print("CoinShuffle Server: Verification done, transaction phase enter")
 
+    print('CoinShuffle Server: Phase 3 Done')
     response = {'msg': 'CoinShuffle Phase 3 Done'}
     return jsonify(response), 201
 
