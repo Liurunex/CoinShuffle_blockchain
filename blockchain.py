@@ -23,6 +23,7 @@ transaction request = {
 """
 from flask import Flask, jsonify, request
 from urllib.parse import urlparse
+from binascii import hexlify, unhexlify
 from uuid import uuid4
 from time import time
 
@@ -72,7 +73,7 @@ class Blockchain:
         })
         # return index of the block which the transaction will be added to
         return self.last_block['index'] + 1
-
+    '''
     def new_message(self, sender, recipient, message):
         # adds a new transaction to the list of transactions
         # go into the next mined Block
@@ -83,10 +84,10 @@ class Blockchain:
         })
         # return index of the block which the transaction will be added to
         return self.last_block['index'] + 1
-
+    
     def msg_board(self):
         return self.message_board;
-
+    '''
     def proof_of_work(self, last_block):
         last_proof = last_block['proof']
         last_hash = self.hash(last_block)
@@ -242,11 +243,12 @@ def new_transaction():
     # create a new Transaction
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
 
-    response = {'message': f'Transaction will be added to Block {index}'}
+    response = {'message': f'Node {self_address}: Transaction will be added to Block {index}'}
     # status code: 201
     return jsonify(response), 201
 
 
+'''
 # /message endpoint, POST request
 @app.route('/message', methods=['POST'])
 def message():
@@ -273,6 +275,7 @@ def board():
 
     # status code: 200
     return jsonify(response), 200
+'''
 
 
 # /chain endpoint, return the full blockchain, GET request
@@ -350,6 +353,7 @@ def consensus():
 
 
 # CoinShuffle
+
 # /shuffle/process, encryption and post to next node, POST request
 @app.route('/shuffle/Phase_2', methods=['POST'])
 def shuffle_process():
@@ -366,16 +370,15 @@ def shuffle_process():
 
     # decode received message
     for i, msg in enumerate(shuffle_message):
-        shuffle_message[i] = NodeCrypto.decrypted_msg(blockchain.key_pair, msg)
+        shuffle_message[i] = NodeCrypto.decryption(blockchain.key_pair, msg.encode())
 
     # encode self address
-    output_address = NodeCrypto.encrypted_msg(public_keys[-1].encode(), self_address)
-
+    output_address = NodeCrypto.encryption(public_keys[current_index].encode(), self_address.encode())
     for index, node in reversed(list(enumerate(ordered_nodes))):
         if node == self_address:
             break
         else:
-            output_address = NodeCrypto.encrypted_msg(public_keys[index].encode(), output_address)
+            output_address = NodeCrypto.encryption(public_keys[index].encode(), unhexlify(output_address.encode()))
 
     # permutation shuffle
     shuffle_message.append(output_address)
@@ -385,9 +388,9 @@ def shuffle_process():
     current_index += 1
     if current_index == len(ordered_nodes):
         # shuffle done, send results to CoinShuffle Server
-        requests.post(url=blockchain.cs_address + '/shuffle/coin_shuffle_res', json={'shuffle_res': shuffle_message})
+        requests.post(url=blockchain.cs_address + '/shuffle/Phase_3', json={'shuffle_res': shuffle_message})
     else:
-        requests.post(f'http://{ordered_nodes[current_index]}/shuffle/Phase_2', json={
+        requests.post(url=f'http://{ordered_nodes[current_index]}/shuffle/Phase_2', json={
             'current_index': current_index,
             'ordered_nodes': ordered_nodes,
             'public_keys': public_keys,
@@ -396,6 +399,7 @@ def shuffle_process():
 
     response = {'message': f'{self_address} Phase_2 Done'}
     return jsonify(response), 201
+
 
 # /shuffle/verify, get CoinShuffle result from CoinShuffle server, then verify and send back boolean, POST request
 @app.route('/shuffle/verify', methods=['POST'])
@@ -406,8 +410,9 @@ def verify():
         return "Error: Please supply a valid shuffle result", 400
 
     res = False
-    for en_key in shuffle_list:
-        if NodeCrypto.decrypted_msg(blockchain.key_pair, en_key) == self_address:
+    for msg in shuffle_list:
+        dmsg = NodeCrypto.decryption(blockchain.key_pair, msg.encode())
+        if unhexlify(dmsg.encode()).decode() == self_address:
             res = True
             break
 
@@ -416,8 +421,6 @@ def verify():
         'Result': res,
     }
     return jsonify(response), 201
-
-
 
 
 # /send_pubkey, send self public key to CoinShuffle Server, GET request
@@ -435,9 +438,10 @@ def send_pubkey():
 @app.route('/send_address', methods=['GET'])
 def send_address():
     # should first check if BlockChain's transaction board has the involved transaction
-    output_address = NodeCrypto.encrypted_msg(self_address, NodeCrypto.pubkey(blockchain.key_pair))
+    output_address = NodeCrypto.encryption(NodeCrypto.pubkey(blockchain.key_pair).encode(), self_address.encode())
+
     response = {
-        'address': output_address,
+        'address': output_address
     }
     return jsonify(response), 200
 

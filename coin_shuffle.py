@@ -44,30 +44,12 @@ def trigger_func():
             if index == len(server.nodes):
                 index = 0
         shuffle_message = []
-        requests.post(f'http://{ordered_nodes[0]}/shuffle/Phase_2', json={
+        requests.post(url=f'http://{ordered_nodes[0]}/shuffle/Phase_2', json={
             'current_index': 0,
             'ordered_nodes': ordered_nodes,
             'public_keys': server.public_keys,
             'shuffle_message': shuffle_message
         })
-
-
-        # send result back to nodes to verify
-        verify_res = True
-        for index, node in enumerate(server.nodes):
-            response = requests.post(f'http://{node}/shuffle/verify', json={
-                'result_list' = shuffle_res
-            })
-            res = response.json()['Result']
-            if res == False:
-                verify_res = False
-        
-        # rerun and find the malicious user
-        if verify_res == False:
-            pass
-        else:
-            # start changing the transaction
-            pass
 
 
 scheduler = BackgroundScheduler()
@@ -102,15 +84,29 @@ def add_nodes():
 
 
 # /shuffle/result, CoinShuffle received result from node, POST request
-@app.route('/shuffle/coin_shuffle_res', methods=['POST'])
+@app.route('/shuffle/Phase_3', methods=['POST'])
 def receive_result():
     values = request.get_json()
     shuffle_res = values.get('shuffle_res')
-
+    print("CoinShuffle Server received Results: ")
+    print(shuffle_res)
+    # send result back to nodes to verify
+    verify_res = True
     for node in server.nodes:
-        requests.post(f'http://{node}/shuffle/Phase_3', json={'shuffle_res': shuffle_res})
+        response = requests.post(url=f'http://{node}/shuffle/verify', json={'result_list': shuffle_res})
+        res = response.json()['Result']
+        if res is False:
+            verify_res = False
+            break
 
-    response = {'msg': 'CoinShuffle Phase 2 Done'}
+    # rerun and find the malicious user
+    if verify_res is False:
+        print("Verification failed")
+    else:
+        # start creating the shuffled transaction
+        print("Verification done, transaction phase enter")
+
+    response = {'msg': 'CoinShuffle Phase 3 Done'}
     return jsonify(response), 201
 
 

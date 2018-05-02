@@ -13,35 +13,43 @@ def public_key(keys):
     return res_key.decode()
 
 
+# input: public_key (type: byte string), plaintext (type: encoded())
+# output: string
 def encryption(p_key, data):
     rsa_key = RSA.importKey(unhexlify(p_key))
-    e_res = rsa_key.encrypt(data.encode(), 32)[0]
-    return hexlify(e_res)
+    e_res = rsa_key.encrypt(data, 32)[0]
+    return hexlify(e_res).decode()
 
 
+# input: key_pair (type: RSA keys), cipher_text (hexlify())
+# output: byte_string
 def decryption(keys, e_msg):
-    return keys.decrypt(unhexlify(e_msg)).decode()
+    res = keys.decrypt(unhexlify(e_msg))
+    return hexlify(res).decode()
 
 
 if __name__ == '__main__':
     # Crypto Test
     key_1 = generate_keys()
     key_2 = generate_keys()
+    key_3 = generate_keys()
     msg = "127.0.0.1:5001"
 
     pk_1 = public_key(key_1)
     pk_2 = public_key(key_2)
+    pk_3 = public_key(key_3)
 
-    #emsg = encryption(pk_1.encode(), msg)
-    #emsg = encryption(pk_2.encode(), emsg)
+    emsg = encryption(pk_1.encode(), msg.encode())
+    emsg = encryption(pk_2.encode(), unhexlify(emsg.encode()))
+    emsg = encryption(pk_3.encode(), unhexlify(emsg.encode()))
 
-    #dmsg = decryption(key_2, emsg)
-    #dmsg = decryption(key_1, dmsg)
-    dmsg = hexlify(msg)
+    print("---------------")
+    dmsg = decryption(key_3, emsg.encode())
+    dmsg = decryption(key_2, dmsg.encode())
+    dmsg = decryption(key_1, dmsg.encode())
 
-    print(dmsg == msg)
-    print(dmsg)
-    print(msg)
+    print(unhexlify(dmsg.encode()).decode() == msg)
+    print(unhexlify(dmsg.encode()).decode())
     # json hexlify result test
     '''
     atest = []
