@@ -75,10 +75,17 @@ def trigger_func():
             print("CoinShuffle Server: Verification failed")
         else:
             # start creating the shuffled transaction
-            print("CoinShuffle Server: Verification done, transaction phase enter")
+            print("CoinShuffle Server: Verification done, enter transaction phase")
 
         server.shuffle_flag = False
         print(f'CoinShuffle Server: Phase 3 Done as {verify_res}')
+
+        # assume now verification result is True
+        # send result back to node 
+        for node in server.nodes:
+            print(f'sending shuffle res back to {node}')
+            requests.post(url=f'http://{node}/shuffle/receive', json={'result_list': server.shuffle_res})
+
 
 
 scheduler = BackgroundScheduler()

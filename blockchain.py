@@ -40,7 +40,7 @@ class Blockchain:
         self.current_transactions = []
         self.chain = []
         self.nodes = set()
-        self.message_board = []
+        self.message_board = {}
         self.cs_address = 'http://127.0.0.1:5000'
         self.key_pair = None
 
@@ -194,8 +194,7 @@ blockchain = Blockchain()
 # user node init
 self_coin = 0
 self_address = ''
-# key(timestamp, sender, recipient), value (msg)
-message_board = dict()
+
 
 
 # /mine endpoint, GET request
@@ -248,19 +247,19 @@ def new_transaction():
     return jsonify(response), 201
 
 
-'''
-# /message endpoint, POST request
+
+# post message to the board, everyone can see and vote , POST request
 @app.route('/message', methods=['POST'])
 def message():
     values = request.get_json()
 
     # check the required fields are in the POST'ed data
-    required = ['sender', 'recipient', 'message']
+    required = ['message']
     if not all(k in values for k in required):
         return 'Missing values', 400
-
+    if (shuffle_list)
     # create a new Message
-    index = blockchain.new_message(values['sender'], values['recipient'], values['message'])
+    index = blockchain.new_message(values['message'])
 
     response = {'message': f'Message will be added to MsgBoard'}
     # status code: 201
@@ -275,7 +274,7 @@ def board():
 
     # status code: 200
     return jsonify(response), 200
-'''
+
 
 
 # /chain endpoint, return the full blockchain, GET request
@@ -452,6 +451,28 @@ def send_address():
     }
     return jsonify(response), 200
 
+# /shuffle/receive, get CoinShuffle result from CoinShuffle server, then store it. POST request
+@app.route('/shuffle/receive', methods=['POST'])
+def receive():
+    values = request.get_json()
+    shuffle_list = values.get('result_list')
+    if shuffle_list is None:
+        return "Error: Please supply a valid shuffle result", 400
+
+    res = False
+    for msg in shuffle_list:
+        try:
+            dmsg = NodeCrypto.decryption(blockchain.key_pair, msg.encode())
+            if unhexlify(dmsg.encode()).decode() == self_address:
+                res = True
+                shuffle_address = dmsg
+                break
+        except UnicodeDecodeError:
+            print("DAMN----------Unicode Error")
+        except ValueError:
+            print("DAMN----------Value Error")
+
+    return jsonify(response), 201
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -459,6 +480,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     port = args.port
     self_address = '127.0.0.1:' + str(port)
+    shuffle_address = ''
     requests.post(url=blockchain.cs_address + '/initial/nodes', json={'node': self_address})
 
     '''
