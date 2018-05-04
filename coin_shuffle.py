@@ -83,7 +83,7 @@ def trigger_func():
         # assume now verification result is True
         # send result back to node 
         for node in server.nodes:
-            print(f'sending shuffle res back to {node}')
+            print(f'sending shuffle res back to {node}, prepare for msg and vote')
             requests.post(url=f'http://{node}/shuffle/receive', json={'result_list': server.shuffle_res})
 
 

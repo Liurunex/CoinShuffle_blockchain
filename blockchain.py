@@ -73,13 +73,12 @@ class Blockchain:
         })
         # return index of the block which the transaction will be added to
         return self.last_block['index'] + 1
-    '''
-    def new_message(self, sender, recipient, message):
+    
+    def new_message(self, sender, message):
         # adds a new transaction to the list of transactions
         # go into the next mined Block
         self.message_board.append({
             'sender': sender,
-            'recipient': recipient,
             'message': message,
         })
         # return index of the block which the transaction will be added to
@@ -257,11 +256,12 @@ def message():
     required = ['message']
     if not all(k in values for k in required):
         return 'Missing values', 400
-    if (shuffle_list)
+    if not shuffle_address:
+        return 'Cannot post msg yet, perform CoinShuffle first'
     # create a new Message
     index = blockchain.new_message(values['message'])
 
-    response = {'message': f'Message will be added to MsgBoard'}
+    response = {'message': f'New Message will be added to MsgBoard'}
     # status code: 201
     return jsonify(response), 201
 
