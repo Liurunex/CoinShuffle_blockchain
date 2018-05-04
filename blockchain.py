@@ -40,6 +40,8 @@ class Blockchain:
         self.current_transactions = []
         self.chain = []
         self.nodes = set()
+        # dictionary of list, key = shuffle address, value is a list
+        # list[0] = message, list[1] = reputation score
         self.message_board = {}
         self.cs_address = 'http://127.0.0.1:5000'
         self.key_pair = None
@@ -75,18 +77,15 @@ class Blockchain:
         return self.last_block['index'] + 1
     
     def new_message(self, sender, message):
-        # adds a new transaction to the list of transactions
-        # go into the next mined Block
-        self.message_board.append({
-            'sender': sender,
-            'message': message,
-        })
+        # post a new message to the msg_board with default reputation = 0
+        tmp = [message, 0]
+        self.message_board[f'sender'] = tmp
         # return index of the block which the transaction will be added to
         return self.last_block['index'] + 1
     
     def msg_board(self):
         return self.message_board;
-    '''
+    
     def proof_of_work(self, last_block):
         last_proof = last_block['proof']
         last_hash = self.hash(last_block)
@@ -259,7 +258,7 @@ def message():
     if not shuffle_address:
         return 'Cannot post msg yet, perform CoinShuffle first'
     # create a new Message
-    index = blockchain.new_message(values['message'])
+    index = blockchain.new_message(shuffle_address, values['message'])
 
     response = {'message': f'New Message will be added to MsgBoard'}
     # status code: 201
