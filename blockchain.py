@@ -79,7 +79,14 @@ class Blockchain:
     def new_message(self, sender, message):
         # post a new message to the msg_board with default reputation = 0
         tmp = [message, 0]
-        self.message_board[f'sender'] = tmp
+        self.message_board[sender] = tmp
+        # return index of the block which the transaction will be added to
+        return self.last_block['index'] + 1
+
+    def vote(self, msg_owner, score):
+        # vote for a user 
+        curr = self.msg_board.get(msg_owner)
+        msg_board[msg_owner] = curr + score
         # return index of the block which the transaction will be added to
         return self.last_block['index'] + 1
     
@@ -260,7 +267,34 @@ def message():
     # create a new Message
     index = blockchain.new_message(shuffle_address, values['message'])
 
-    response = {'message': f'New Message will be added to MsgBoard'}
+    response = {'message': f'New Message by {shuffle_address} will be added to MsgBoard'}
+    # status code: 201
+    return jsonify(response), 201
+
+
+# vote on a message in the message board, +1 for good -1 for bad , POST request
+@app.route('/vote', methods=['POST'])
+def vote():
+    values = request.get_json()
+
+    # check the required fields are in the POST'ed data
+    required = ['msg_owner', 'vote']
+    if not all(k in values for k in required):
+        return 'Missing values', 400
+
+    msg_owner = values['msg_owner']
+    score = values['vote']
+
+    if msg_owner not in msg_board:
+        return 'No such a user found'
+    if (score != 1) or (score != 0):
+        return 'Vote score invalid'
+
+    
+    # create a new Message
+    index = blockchain.vote(msg_owner, score)
+
+    response = {'message': f'Reputaion score for {msg_owner} updated by {score}'}
     # status code: 201
     return jsonify(response), 201
 
