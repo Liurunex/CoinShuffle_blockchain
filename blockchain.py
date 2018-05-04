@@ -290,7 +290,6 @@ def vote():
     if (score != 1) or (score != 0):
         return 'Vote score invalid'
 
-    
     # create a new Message
     index = blockchain.vote(msg_owner, score)
 
