@@ -1,8 +1,8 @@
 # CoinShuffle with Blockchain
-independent project 
+Independent project 
 
-# set the blockchain enviroment
-check thie page for instruction: https://hackernoon.com/learn-blockchains-by-building-one-117428612f46
+# Set the blockchain enviroment
+Check thie page for instruction: https://hackernoon.com/learn-blockchains-by-building-one-117428612f46
 
 # How to run
 Please first initiate the coinshuffle server (coin_shuffle.py), then you can intiate duplicate blockchain nodes to start. The coinshuffle server was configured with constant local address 127.0.0.1:5000, please don't use this specific address to run the node. 
