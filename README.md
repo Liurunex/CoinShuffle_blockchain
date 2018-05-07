@@ -1,4 +1,4 @@
-# value_shuffle_block_chain
+# CoinShuffle with Blockchain
 independent project 
 
 # set the blockchain enviroment
